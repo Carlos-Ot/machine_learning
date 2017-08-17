@@ -26,7 +26,7 @@ public abstract class Bagging {
     protected static Dataset generateDataset (Dataset data) {
         Sampling sampling = Sampling.SubSampling;
 
-        Pair<Dataset, Dataset> dataset = sampling.sample(data, (int)(data.size()*0.7));
+        Pair<Dataset, Dataset> dataset = sampling.sample(data, (int)(data.size()*0.5));
 
         return dataset.x();
     }
