@@ -11,7 +11,10 @@ import net.sf.javaml.core.Dataset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaggingMFV extends Bagging {
+import net.sf.javaml.tools.weka.WekaClassifier;
+import weka.classifiers.bayes.NaiveBayes;
+
+public class BaggingNaiveBayes extends Bagging {
     @Override
     public List<Classifier> generatePool(Dataset dataset, int nClassifiers) {
 
@@ -19,10 +22,12 @@ public class BaggingMFV extends Bagging {
 
         for (int i = 0; i < nClassifiers; i++) {
             Dataset sample = generateDataset(dataset);
-            Classifier meanFeatureVotingClassifier = new MeanFeatureVotingClassifier();
-            meanFeatureVotingClassifier.buildClassifier(sample);
 
-            pool.add(meanFeatureVotingClassifier);
+            NaiveBayes naiveBayes = new NaiveBayes();
+            Classifier jmlTree = new WekaClassifier(naiveBayes);
+            jmlTree.buildClassifier(sample);
+
+            pool.add(jmlTree);
         }
         return pool;
     }

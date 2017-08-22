@@ -1,22 +1,16 @@
-import bagging.BaggingMFV;
-import bagging.BaggingSMO;
+import bagging.BaggingNaiveBayes;
 import be.abeel.util.Pair;
 import net.sf.javaml.classification.Classifier;
-import net.sf.javaml.classification.evaluation.CrossValidation;
-import net.sf.javaml.classification.evaluation.PerformanceMeasure;
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.sampling.Sampling;
 import net.sf.javaml.tools.data.FileHandler;
-import net.sf.javaml.tools.weka.WekaClassifier;
-import weka.classifiers.functions.SMO;
 
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Main {
 
@@ -33,24 +27,16 @@ public class Main {
         System.out.println("Training: " + trainingData.size() + " Validation: " + validationData.size() + " Total: " + data.size());
 
        /* BaggingKNN baggingKNN = new BaggingKNN();
-
         baggingKNN.setK(5);
         List<Classifier> pool = baggingKNN.generatePool(trainingData, 10);*/
 
-        /*BaggingMFV baggingMFV = new BaggingMFV();
-        List<Classifier> pool = baggingMFV.generatePool(trainingData, 10);*/
-/*
-        BaggingSMO baggingSMO = new BaggingSMO();
+        BaggingNaiveBayes baggingNaiveBayes = new BaggingNaiveBayes();
+        List<Classifier> pool = baggingNaiveBayes.generatePool(trainingData, 10);
+
+      /*  BaggingSMO baggingSMO = new BaggingSMO();
         List<Classifier> pool = baggingSMO.generatePool(trainingData, 10);*/
 
-        SMO smo = new SMO();
-        Classifier javaml = new WekaClassifier(smo);
-        CrossValidation cv = new CrossValidation(javaml);
-        Map<Object, PerformanceMeasure> pm = cv.crossValidation(trainingData);
-
-        System.out.println(pm);
-
-       /* int correct = 0;
+        int correct = 0;
         int wrong = 0;
         for (Instance instance: validationData) {
             Object predictedValue = classify(validationData.classes().toArray(), instance, pool);
@@ -65,7 +51,7 @@ public class Main {
             }
         }
 
-        System.out.println("Correct: " + correct + "\nWrong: " + wrong);*/
+        System.out.println("Correct: " + correct + "\nWrong: " + wrong);
 
 
     }
