@@ -6,7 +6,6 @@ import net.sf.javaml.core.Dataset;
 import net.sf.javaml.sampling.Sampling;
 
 import java.util.List;
-import java.util.Random;
 
 public abstract class Bagging {
 

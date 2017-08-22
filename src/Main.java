@@ -1,13 +1,22 @@
-import bagging.BaggingKNN;
+import bagging.BaggingMFV;
+import bagging.BaggingSMO;
+import be.abeel.util.Pair;
 import net.sf.javaml.classification.Classifier;
+import net.sf.javaml.classification.evaluation.CrossValidation;
+import net.sf.javaml.classification.evaluation.PerformanceMeasure;
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.Instance;
+import net.sf.javaml.sampling.Sampling;
 import net.sf.javaml.tools.data.FileHandler;
+import net.sf.javaml.tools.weka.WekaClassifier;
+import weka.classifiers.functions.SMO;
+
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
 
@@ -15,17 +24,38 @@ public class Main {
 
         Dataset data = FileHandler.loadDataset(new File("./datasets/wdbc.data"), 1, ",");
 
-        BaggingKNN baggingKNN = new BaggingKNN();
+        Sampling sampling = Sampling.SubSampling;
+        Pair<Dataset, Dataset> dataset = sampling.sample(data, (int)(data.size()*0.5));
 
-        List<Classifier> pool = baggingKNN.generatePool(data, 100);
+        Dataset trainingData = dataset.x();
+        Dataset validationData = dataset.y();
 
-        Dataset dataToClassify = FileHandler.loadDataset(new File("./datasets/wdbc.data"), 1, ",");
+        System.out.println("Training: " + trainingData.size() + " Validation: " + validationData.size() + " Total: " + data.size());
 
-        int correct = 0;
+       /* BaggingKNN baggingKNN = new BaggingKNN();
+
+        baggingKNN.setK(5);
+        List<Classifier> pool = baggingKNN.generatePool(trainingData, 10);*/
+
+        /*BaggingMFV baggingMFV = new BaggingMFV();
+        List<Classifier> pool = baggingMFV.generatePool(trainingData, 10);*/
+/*
+        BaggingSMO baggingSMO = new BaggingSMO();
+        List<Classifier> pool = baggingSMO.generatePool(trainingData, 10);*/
+
+        SMO smo = new SMO();
+        Classifier javaml = new WekaClassifier(smo);
+        CrossValidation cv = new CrossValidation(javaml);
+        Map<Object, PerformanceMeasure> pm = cv.crossValidation(trainingData);
+
+        System.out.println(pm);
+
+       /* int correct = 0;
         int wrong = 0;
-        for (Instance instance: dataToClassify) {
-            Object predictedValue = classify(dataToClassify.classes().toArray(), instance, pool);
+        for (Instance instance: validationData) {
+            Object predictedValue = classify(validationData.classes().toArray(), instance, pool);
             Object realValue = instance.classValue();
+           // System.out.println("Predicted Value: " + predictedValue.toString() + " Real Value: " + realValue.toString());
 
             if (predictedValue.equals(realValue)) {
                 correct++;
@@ -35,7 +65,7 @@ public class Main {
             }
         }
 
-        System.out.println("Correct: " + correct + "\nWrong: " + wrong);
+        System.out.println("Correct: " + correct + "\nWrong: " + wrong);*/
 
 
     }
