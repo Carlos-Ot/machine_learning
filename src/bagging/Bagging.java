@@ -22,9 +22,8 @@ public abstract class Bagging {
      * @param data the base Dataset
      * @return a sub Dataset
      */
-    protected static Dataset generateDataset (Dataset data) {
+    static Dataset generateDataset (Dataset data) {
         Sampling sampling = Sampling.SubSampling;
-
         Pair<Dataset, Dataset> dataset = sampling.sample(data, (int)(data.size()*0.5));
 
         return dataset.x();
@@ -49,5 +48,9 @@ public abstract class Bagging {
         Pair<Dataset, Dataset> dataset = sampling.sample(data, (int)(data.size()*sampleSize));
 
         return dataset.x();
+    }
+
+    public String getName() {
+        return getClass().getSimpleName();
     }
 }

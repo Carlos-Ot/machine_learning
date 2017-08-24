@@ -1,4 +1,6 @@
- class VotingClasses {
+package utils;
+
+class VotingClasses {
     private Object className;
     private int votes;
 

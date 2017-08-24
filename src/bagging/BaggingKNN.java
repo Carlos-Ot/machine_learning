@@ -9,7 +9,16 @@ import java.util.List;
 
 public class BaggingKNN extends Bagging {
 
-    private int k = 1;
+    private static final int DEFAULT_K = 1;
+    private int k;
+
+    public BaggingKNN(int k) {
+        this.k = k;
+    }
+
+    public BaggingKNN() {
+        this.k = DEFAULT_K;
+    }
 
     @Override
     public List<Classifier> generatePool(Dataset dataset, int nClassifiers) {
