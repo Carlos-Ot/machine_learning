@@ -6,6 +6,7 @@ import net.sf.javaml.core.Dataset;
 import net.sf.javaml.sampling.Sampling;
 
 import java.util.List;
+import java.util.Random;
 
 public abstract class Bagging {
 
@@ -24,7 +25,13 @@ public abstract class Bagging {
      */
     static Dataset generateDataset (Dataset data) {
         Sampling sampling = Sampling.SubSampling;
-        Pair<Dataset, Dataset> dataset = sampling.sample(data, (int)(data.size()*0.5));
+
+        double start = 0.4;
+        double end = 0.9;
+        double random = new Random().nextDouble();
+        double result = start + (random * (end - start));
+
+        Pair<Dataset, Dataset> dataset = sampling.sample(data, (int)(data.size()*result));
 
         return dataset.x();
     }

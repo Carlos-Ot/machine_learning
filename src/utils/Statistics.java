@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Statistics {
+    public static final int DECIMAL = 4;
     private static Double[] data;
     private static int size;
 
