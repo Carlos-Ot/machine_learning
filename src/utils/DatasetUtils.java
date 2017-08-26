@@ -7,9 +7,15 @@ import net.sf.javaml.core.Instance;
 import net.sf.javaml.sampling.Sampling;
 import net.sf.javaml.tools.data.FileHandler;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.SortedSet;
 
 public class DatasetUtils {
@@ -56,5 +62,38 @@ public class DatasetUtils {
         Collections.shuffle(validationDataset);
 
         return new Pair<>(trainingDataset, validationDataset);
+    }
+
+    public static List<Object[]> readData(String path, int classIndex) throws IOException {
+        List<Object[]> lines = new ArrayList<>();
+        for (String line: Files.readAllLines(Paths.get(path))) {
+            String[] parts = line.split("\\s+,|,\\s+|,");
+            Object[] lineArray = new Object[parts.length];
+            for (int i = 0 ; i < parts.length ; i++) {
+                if (i != classIndex) {
+                    lineArray[i] = Double.parseDouble(parts[i]);
+                } else {
+                    lineArray[i] = parts[i];
+                }
+            }
+            lines.add(lineArray);
+        }
+
+        return lines;
+    }
+
+    public static void writeFile(String filename, List<Object[]> lines) throws IOException{
+        BufferedWriter outputWriter = null;
+        outputWriter = new BufferedWriter(new FileWriter(filename));
+        for (Object[] line: lines) {
+            for (int i = 0; i < line.length; i++) {
+                outputWriter.write(line[i]+"");
+                if (i < line.length - 1)
+                    outputWriter.write(",");
+            }
+            outputWriter.newLine();
+        }
+        outputWriter.flush();
+        outputWriter.close();
     }
 }
